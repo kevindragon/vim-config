@@ -1,0 +1,142 @@
+" set not compatible 
+set nocompatible
+set nobackup
+
+" set window
+set guioptions-=T
+" set guioptions-=m
+
+set nu
+
+" set status bar
+set ruler
+set showcmd
+set scrolloff=1 " so
+if has("gui_running")
+    set cursorline
+endif
+
+" set window position
+if has("gui_running")
+    winpos 200 100
+    set lines=35 columns=110
+endif
+
+" 标签页只显示文件名
+function ShortTabLabel ()
+    let bufnrlist = tabpagebuflist (v:lnum)
+    let label = bufname (bufnrlist[tabpagewinnr (v:lnum) -1])
+    let filename = fnamemodify (label, ':t')
+    return filename
+endfunction
+set guitablabel=%{ShortTabLabel()}
+
+set cindent
+set autoindent
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+
+set fileformat=unix
+set fenc=utf-8
+set encoding=utf-8
+
+" set tags
+set tags=/var/www/waimai/tags
+
+" set search
+set incsearch
+set hlsearch
+set ignorecase
+
+set backspace=indent,eol,start
+set whichwrap=b,s,<,>,[,]
+
+" set font
+" set guifont=Droid\ Sans\ Mono\ 10
+
+colorscheme desert
+
+filetype plugin indent on
+
+" autocmd FileType python setlocal et sta sw=4 sts=4
+" let g:pydiction_location = '~/.vim/tools/pydiction/complete-dict'
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+:inoremap <S-ENTER> <c-r>=SkipPair()<CR>
+:inoremap <S-SPACE> <ESC>la
+:inoremap <C-ENTER> <ESC>A;<CR>
+:inoremap ( ()<ESC>i
+:inoremap ) <c-r>=ClosePair(')')<CR>
+:inoremap { <c-r>=ClsoeBrace()<CR>
+:inoremap } <c-r>=ClosePair('}')<CR>
+:inoremap [ []<ESC>i
+:inoremap ] <c-r>=ClosePair(']')<CR>
+:inoremap ;; <ESC>A;<CR>
+
+function ClosePair(char)
+   if getline('.')[col('.') - 1] == a:char
+      return "\<Right>"
+   else
+      return a:char
+   endif
+endf
+function Semicolon()
+   "echo getline('.')[col('.')]
+   if getline('.')[col('.')] == ')'
+      return "<ESC>A;"
+   elseif getline('.')[col('.')] == '}'
+      return "\<ESC>A;"
+   elseif getline('.')[col('.')] == ']'
+      return "\<ESC>A;"
+   else
+      return ";"
+   endif
+endf
+function SkipPair()
+   if getline('.')[col('.') - 1] == ')'
+      return "\<ESC>o"
+   else
+      normal j
+      let curline = line('.')
+      let nxtline = curline
+      while curline == nxtline
+         if getline('.')[col('.') - 1] == '}'
+            normal j
+            let nxtline = nxtline + 1
+            let curline = line('.')
+            continue
+         else
+            return "\<ESC>i"
+         endif
+        
+      endwhile
+      return "\<ESC>o"
+   endif
+endf
+function ClsoeBrace()
+   if getline('.')[col('.') - 2] == '='
+      return "{}\<ESC>i"
+   elseif getline('.')[col('.') - 3] == '='
+      return "{}\<ESC>i"
+   elseif getline('.')[col('.') - 1] == '{'
+      return "{}\<ESC>i"
+   elseif getline('.')[col('.') - 2] == '{'
+      return "{}\<ESC>i"
+   elseif getline('.')[col('.') - 2] == ','
+      return "{}\<ESC>i"
+   elseif getline('.')[col('.') - 3] == ','
+      return "{}\<ESC>i"
+   else
+      return "{}\<ESC>i"
+   endif
+endf
+
+" set shortcuts
+source ~/.vim/shortcuts.vim
+
+" myself filetype
+" augroup filetypedetect
+"    au BufNewFile,BufRead *.tpl    setf tpl
+" augroup END
