@@ -79,6 +79,26 @@ filetype plugin indent on     " required!
 set guioptions-=T
 set guioptions-=m
 
+" set window position
+if has("gui_running")
+    winpos 200 100
+    set lines=35 columns=110
+endif
+
+" 标签页只显示文件名
+function ShortTabLabel ()
+    let bufnrlist = tabpagebuflist (v:lnum)
+    let label = bufname (bufnrlist[tabpagewinnr (v:lnum) -1])
+    let filename = fnamemodify (label, ':t')
+    return filename
+endfunction
+set guitablabel=%{ShortTabLabel()}
+
+" set status bar
+set ruler
+set showcmd
+set scrolloff=1
+
 colorscheme lucius
 
 set nobackup
@@ -87,6 +107,14 @@ set shiftwidth=4
 set tabstop=4
 set softtabstop=4
 set expandtab
+set cindent
+set autoindent
+
+" set search
+set incsearch
+set hlsearch
+set ignorecase
+
 set tags=D:\jumeiwei\tags
 
 nmap <C-tab> :tabn<CR>
