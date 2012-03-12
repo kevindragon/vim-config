@@ -4,7 +4,7 @@ source $VIMRUNTIME/mswin.vim
 behave mswin
 
 set diffexpr=MyDiff()
-function MyDiff()
+function! MyDiff()
   let opt = '-a --binary '
   if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
   if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
@@ -48,9 +48,20 @@ Bundle 'gmarik/vundle'
 " Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Bundle 'tpope/vim-rails.git'
 " vim-scripts repos
-Bundle 'winmanager'
 Bundle 'taglist.vim'
+Bundle 'winmanager'
+" window manager
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap wm :WMToggle<CR>
+
 Bundle 'minibufexplorerpp'
+" mini buffer
+let g:miniBufExplMapCTabSwitchBufs=1
+
+Bundle 'SuperTab'
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+
 " Bundle 'L9'
 " Bundle 'FuzzyFinder'
 " non github repos
@@ -122,9 +133,6 @@ source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 language message zh_CN.utf-8
 
-" set swp files path
-set directory=D:\gvimswps
-
 " 设置当前行背景<设置列set cursorcolumn whit>
 set cursorline
 set nocursorcolumn
@@ -135,11 +143,7 @@ set backspace=indent,eol,start
 " 设置字体、字号
 set guifont=Consolas:h10
 
-" 对autonomy里查询出来的xml进行格式化，找出id
-nmap tx :%s/\s*<ID>\(\d\+\)<\/ID>/\1/g<CR>:g/^[^0-9]/d<CR>:g/^$/d<CR>
-nmap tc :%s/^\([^ ]\+\)\s\+\([^ ]\+\)$/cvs co -r "\2" "alpha\1"/g<CR>
-
-set tags=Y:\alpha\tags
+set tags=D:\codes\php\jumeiwei\tags
 
 nmap <C-tab> :tabn<CR>
 nmap <C-S-TAB> :tabp<CR>
@@ -149,12 +153,8 @@ nmap <F4> :bd<CR>
 let Tlist_Show_One_File=1
 let Tlist_Exit_OnlyWindow=1
 
-" window manager
-let g:winManagerWindowLayout='FileExplorer|TagList'
-nmap wm :WMToggle<CR>
-
-" mini buffer
-let g:miniBufExplMapCTabSwitchBufs=1
+" new omni completion
+set completeopt=longest,menu
 
 :inoremap <S-ENTER> <c-r>=SkipPair()<CR>
 :inoremap <S-SPACE> <ESC>la
