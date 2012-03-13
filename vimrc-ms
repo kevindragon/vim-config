@@ -57,6 +57,7 @@ nmap wm :WMToggle<CR>
 Bundle 'minibufexplorerpp'
 " mini buffer
 let g:miniBufExplMapCTabSwitchBufs=1
+set bufhidden=hide
 
 Bundle 'SuperTab'
 let g:SuperTabRetainCompletionType=2
