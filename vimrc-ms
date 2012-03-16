@@ -63,6 +63,12 @@ Bundle 'SuperTab'
 let g:SuperTabRetainCompletionType=2
 let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 
+Bundle 'phpfolding.vim'
+
+" ----------------------------------------
+"  auto complete pop
+Bundle 'AutoComplPop'
+
 " Bundle 'L9'
 " Bundle 'FuzzyFinder'
 " non github repos
