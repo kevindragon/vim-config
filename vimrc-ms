@@ -117,12 +117,18 @@ colorscheme lucius
 
 set nobackup
 set nu
+set cindent
+set autoindent
+
 set shiftwidth=4
 set tabstop=4
 set softtabstop=4
 set expandtab
-set cindent
-set autoindent
+
+au BufRead,BufNewFile *.tpl set filetype=html
+if has("autocmd")
+  autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+endif
 
 " set search
 set incsearch
