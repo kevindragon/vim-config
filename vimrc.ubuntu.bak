@@ -4,7 +4,7 @@ set nobackup
 
 " set window
 set guioptions-=T
-" set guioptions-=m
+set guioptions-=m
 
 set nu
 
@@ -19,7 +19,7 @@ endif
 " set window position
 if has("gui_running")
     winpos 200 100
-    set lines=35 columns=110
+    set lines=25 columns=80
 endif
 
 " 标签页只显示文件名
@@ -43,7 +43,8 @@ set fenc=utf-8
 set encoding=utf-8
 
 " set tags
-set tags=/var/www/waimai/tags
+set tags=/var/www/jumeiwei/tags
+set dir=~/asshole/gvsess/
 
 " set search
 set incsearch
@@ -56,13 +57,70 @@ set whichwrap=b,s,<,>,[,]
 " set font
 " set guifont=Droid\ Sans\ Mono\ 10
 
-colorscheme desert
+" ------------------------------
+"  vundle bundle
+" ------------------------------
+filetype off
 
-filetype plugin indent on
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-" autocmd FileType python setlocal et sta sw=4 sts=4
-" let g:pydiction_location = '~/.vim/tools/pydiction/complete-dict'
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" My Bundles here:
+"
+" original repos on github
+" Bundle 'tpope/vim-fugitive'
+Bundle 'Lucius'
+Bundle 'winmanager'
+" window manager
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap wm :WMToggle<CR>
+
+"Bundle 'minibufexplorerpp'
+" mini buffer
+"let g:miniBufExplMapCTabSwitchBufs=1
+"set bufhidden=hide
+
+Bundle 'SuperTab'
+let g:SuperTabRetainCompletionType=2
+let g:SuperTabDefaultCompletionType="<C-X><C-O>"
+
+" ----------------------------------------
+"  auto complete pop
+"Bundle 'AutoComplPop'
+
+" vim-scripts repos
+Bundle 'phpfolding.vim'
+Bundle 'taglist.vim'
+
+" python complete
+Bundle 'pythoncomplete'
+let g:pydiction_location = '~/.vim/tools/pydiction/complete-dict'
 autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+
+" Bundle 'L9'
+" Bundle 'FuzzyFinder'
+" non github repos
+" Bundle 'git://git.wincent.com/command-t.git'
+" ...
+
+filetype plugin indent on     " required! 
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+
+colorscheme lucius
+autocmd BufEnter *.phtml set syn=php
 
 :inoremap <S-ENTER> <c-r>=SkipPair()<CR>
 :inoremap <S-SPACE> <ESC>la
@@ -136,7 +194,3 @@ endf
 " set shortcuts
 source ~/.vim/shortcuts.vim
 
-" myself filetype
-" augroup filetypedetect
-"    au BufNewFile,BufRead *.tpl    setf tpl
-" augroup END
