@@ -1,68 +1,39 @@
-" set not compatible 
 set nocompatible
-set nobackup
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+behave mswin
 
-" set window
-set guioptions-=T
-set guioptions-=m
-
-set nu
-
-" set status bar
-set ruler
-set showcmd
-set scrolloff=1 " so
-if has("gui_running")
-    set cursorline
-endif
-
-" set window position
-if has("gui_running")
-    winpos 200 100
-    set lines=25 columns=80
-endif
-
-" 标签页只显示文件名
-function ShortTabLabel ()
-    let bufnrlist = tabpagebuflist (v:lnum)
-    let label = bufname (bufnrlist[tabpagewinnr (v:lnum) -1])
-    let filename = fnamemodify (label, ':t')
-    return filename
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
-set guitablabel=%{ShortTabLabel()}
-
-set cindent
-set autoindent
-set expandtab
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-
-set fileformat=unix
-set fenc=utf-8
-set encoding=utf-8
-
-" set tags
-set tags=/var/www/jumeiwei/tags
-set dir=~/asshole/gvsess/
-
-" set search
-set incsearch
-set hlsearch
-set ignorecase
-
-set backspace=indent,eol,start
-set whichwrap=b,s,<,>,[,]
-
-" set font
-" set guifont=Droid\ Sans\ Mono\ 10
 
 " ------------------------------
 "  vundle bundle
 " ------------------------------
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=$VIMRUNTIME/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
@@ -73,40 +44,48 @@ Bundle 'gmarik/vundle'
 "
 " original repos on github
 " Bundle 'tpope/vim-fugitive'
-Bundle 'Lucius'
+" Bundle 'Lokaltog/vim-easymotion'
+" Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Bundle 'tpope/vim-rails.git'
+" vim-scripts repos
+" ----------------------------------------
+"  window manager
 Bundle 'winmanager'
-" window manager
 let g:winManagerWindowLayout='FileExplorer|TagList'
 nmap wm :WMToggle<CR>
-
-"Bundle 'minibufexplorerpp'
+" ----------------------------------------
+" tag list
+Bundle 'taglist.vim'
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+" ----------------------------------------
 " mini buffer
+"Bundle 'minibufexplorerpp'
 "let g:miniBufExplMapCTabSwitchBufs=1
 "set bufhidden=hide
-
+" ----------------------------------------
+" Super Tab
 Bundle 'SuperTab'
 let g:SuperTabRetainCompletionType=2
 let g:SuperTabDefaultCompletionType="<C-X><C-O>"
 
+Bundle 'phpfolding.vim'
+
 " ----------------------------------------
 "  auto complete pop
-"Bundle 'AutoComplPop'
+Bundle 'AutoComplPop'
 
-" vim-scripts repos
-Bundle 'phpfolding.vim'
-Bundle 'taglist.vim'
-
-" python complete
-Bundle 'pythoncomplete'
-let g:pydiction_location = '~/.vim/tools/pydiction/complete-dict'
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-
+" ----------------------------------------
+"  ColorV
+Bundle 'ColorV'
 
 " Bundle 'L9'
 " Bundle 'FuzzyFinder'
 " non github repos
 " Bundle 'git://git.wincent.com/command-t.git'
 " ...
+
+source $VIMRUNTIME/macros/matchit.vim
 
 filetype plugin indent on     " required! 
 "
@@ -119,8 +98,94 @@ filetype plugin indent on     " required!
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle command are not allowed..
 
+" ------------------------------
+"  my settings
+"  first set window layout
+
+set guioptions-=T
+set guioptions-=m
+
+" set window position
+if has("gui_running")
+    winpos 200 100
+    set lines=35 columns=110
+endif
+
+" 标签页只显示文件名
+function ShortTabLabel ()
+    let bufnrlist = tabpagebuflist (v:lnum)
+    let label = bufname (bufnrlist[tabpagewinnr (v:lnum) -1])
+    let filename = fnamemodify (label, ':t')
+    return filename
+endfunction
+set guitablabel=%{ShortTabLabel()}
+
+" set status bar
+set ruler
+set showcmd
+set scrolloff=1
+
 colorscheme lucius
-autocmd BufEnter *.phtml set syn=php
+
+set nobackup
+set nu
+set cindent
+set autoindent
+
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set expandtab
+
+au BufRead,BufNewFile *.tpl set filetype=html
+if has("autocmd")
+  autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType xhtml setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
+endif
+
+" set search
+set incsearch
+set hlsearch
+set ignorecase
+
+" file encoding
+set fileformat=unix
+set fencs=utf-8,ucs-bom,gbk,gb2312,cp936,Big5
+set encoding=utf-8
+
+set langmenu=zh_CN
+let $LANG='zh_CN.UTF-8'
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+language message zh_CN.utf-8
+
+" set swp files path
+set directory=C:\gvimswps
+
+" 设置当前行背景<设置列set cursorcolumn whit>
+set cursorline
+set nocursorcolumn
+
+" 设置光标在行首时按退格键，光标会回到上一行行尾
+set backspace=indent,eol,start
+
+" new omni completion
+set completeopt=longest,menu
+
+" 设置字体、字号
+set guifont=Consolas:h10
+
+" 对autonomy里查询出来的xml进行格式化，找出id
+nmap tx :%s/\s*<ID>\(\d\+\)<\/ID>/\1/g<CR>:g/^[^0-9]/d<CR>:g/^$/d<CR>
+nmap tc :%s/^\([^ ]\+\)\s\+\([^ ]\+\)$/cvs co -r "\2" "alpha\1"/g<CR>
+nmap tn :%s/\n/,/g<CR>:nohls<CR>
+
+set tags=X:/alpha/tags
+
+nmap <C-tab> :tabn<CR>
+nmap <C-S-TAB> :tabp<CR>
+nmap <F4> :bd<CR>
 
 :inoremap <S-ENTER> <c-r>=SkipPair()<CR>
 :inoremap <S-SPACE> <ESC>la
@@ -190,7 +255,4 @@ function ClsoeBrace()
       return "{}\<ESC>i"
    endif
 endf
-
-" set shortcuts
-source ~/.vim/shortcuts.vim
 
