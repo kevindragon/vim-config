@@ -1,7 +1,4 @@
 set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-behave mswin
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -33,7 +30,7 @@ endfunction
 " ------------------------------
 filetype off
 
-set rtp+=$VIMRUNTIME/bundle/vundle/
+set rtp+=$HOME/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
@@ -174,7 +171,7 @@ set backspace=indent,eol,start
 set completeopt=longest,menu
 
 " 设置字体、字号
-set guifont=Consolas:h10
+"set guifont=Consolas:h10
 
 " 对autonomy里查询出来的xml进行格式化，找出id
 nmap tx :%s/\s*<ID>\(\d\+\)<\/ID>/\1/g<CR>:g/^[^0-9]/d<CR>:g/^$/d<CR>
