@@ -178,7 +178,7 @@ nmap tx :%s/\s*<ID>\(\d\+\)<\/ID>/\1/g<CR>:g/^[^0-9]/d<CR>:g/^$/d<CR>
 nmap tc :%s/^\([^ ]\+\)\s\+\([^ ]\+\)$/cvs co -r "\2" "alpha\1"/g<CR>
 nmap tn :%s/\n/,/g<CR>:nohls<CR>
 
-set tags=X:/alpha/tags
+"set tags=X:/alpha/tags
 
 nmap <C-tab> :tabn<CR>
 nmap <C-S-TAB> :tabp<CR>
