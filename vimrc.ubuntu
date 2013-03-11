@@ -158,7 +158,7 @@ source $VIMRUNTIME/menu.vim
 language message zh_CN.utf-8
 
 " set swp files path
-set directory=C:\gvimswps
+"set directory=C:\gvimswps
 
 " 设置当前行背景<设置列set cursorcolumn whit>
 set cursorline
